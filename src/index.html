@@ -36,9 +36,9 @@
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="panel-dimensions">
         <div class="panel-header">Dimensions</div>
-        <div class="panel-content">
+        <div class="panel-content panel-scroll">
           <div class="dimension-row">
             <label>Original:</label>
             <span id="original-dims" class="value">-</span>
@@ -51,15 +51,34 @@
             <label>New Height:</label>
             <input type="number" id="new-height" class="input" min="1" placeholder="px">
           </div>
+          <div class="ratio-row">
+            <label id="ratio-label">Ratio:</label>
+            <div class="ratio-buttons" id="ratio-buttons">
+              <button class="ratio-btn" data-ratio="16:9">16:9</button>
+              <button class="ratio-btn" data-ratio="4:3">4:3</button>
+              <button class="ratio-btn" data-ratio="1:1">1:1</button>
+              <button class="ratio-btn" data-ratio="3:2">3:2</button>
+              <button class="ratio-btn" data-ratio="9:16">9:16</button>
+              <button class="ratio-btn" data-ratio="21:9">21:9</button>
+              <button class="ratio-btn" data-ratio="original">Original</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="panel-info">
         <div class="panel-header">Information</div>
-        <div class="panel-content">
+        <div class="panel-content panel-scroll">
           <div class="dimension-row">
             <label>Format:</label>
             <span id="format-info" class="value">-</span>
+          </div>
+          <div class="dimension-row quality-row" id="quality-row" style="display: none;">
+            <label id="quality-label">Quality:</label>
+            <div class="quality-control">
+              <input type="range" id="quality-slider" class="quality-slider" min="1" max="100" value="90">
+              <span id="quality-value" class="quality-value">90%</span>
+            </div>
           </div>
         </div>
       </div>

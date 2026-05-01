@@ -9,6 +9,7 @@
     "newWidth": "New Width",
     "newHeight": "New Height",
     "px": "px",
+    "ratio": "Ratio",
     "info": "Information",
     "format": "Format",
     "resize": "Resize",
@@ -21,7 +22,14 @@
     "errorProcessingImage": "Error processing image",
     "errorResize": "Enter valid width and height",
     "saved": "Saved",
-    "imageSaved": "Image saved successfully"
+    "imageSaved": "Image saved successfully",
+    "dropHere": "Drop image here",
+    "dropActive": "Release to load image",
+    "shortcutOpen": "Ctrl+O to open",
+    "shortcutSave": "Ctrl+Shift+S to resize",
+    "shortcutClear": "Ctrl+L to clear",
+    "quality": "Quality",
+    "qualityHint": "JPEG only"
   },
   "pt-BR": {
     "appTitle": "Imgro",
@@ -33,6 +41,7 @@
     "newWidth": "Nova Largura",
     "newHeight": "Nova Altura",
     "px": "px",
+    "ratio": "Proporção",
     "info": "Informações",
     "format": "Formato",
     "resize": "Redimensionar",
@@ -45,7 +54,14 @@
     "errorProcessingImage": "Erro ao processar imagem",
     "errorResize": "Informe largura e altura válidas",
     "saved": "Salvo",
-    "imageSaved": "Imagem salva com sucesso"
+    "imageSaved": "Imagem salva com sucesso",
+    "dropHere": "Solte a imagem aqui",
+    "dropActive": "Solte para carregar a imagem",
+    "shortcutOpen": "Ctrl+O para abrir",
+    "shortcutSave": "Ctrl+Shift+S para redimensionar",
+    "shortcutClear": "Ctrl+L para limpar",
+    "quality": "Qualidade",
+    "qualityHint": "Apenas JPEG"
   },
   "es": {
     "appTitle": "Imgro",
@@ -57,6 +73,7 @@
     "newWidth": "Nuevo Ancho",
     "newHeight": "Nuevo Alto",
     "px": "px",
+    "ratio": "Proporción",
     "info": "Información",
     "format": "Formato",
     "resize": "Redimensionar",
@@ -69,7 +86,14 @@
     "errorProcessingImage": "Error al procesar imagen",
     "errorResize": "Ingrese ancho y alto válidos",
     "saved": "Guardado",
-    "imageSaved": "Imagen guardada con éxito"
+    "imageSaved": "Imagen guardada con éxito",
+    "dropHere": "Suelta la imagen aquí",
+    "dropActive": "Suelta para cargar la imagen",
+    "shortcutOpen": "Ctrl+O para abrir",
+    "shortcutSave": "Ctrl+Shift+S para redimensionar",
+    "shortcutClear": "Ctrl+L para limpiar",
+    "quality": "Calidad",
+    "qualityHint": "Solo JPEG"
   },
   "fr": {
     "appTitle": "Imgro",
@@ -81,6 +105,7 @@
     "newWidth": "Nouvelle Largeur",
     "newHeight": "Nouvelle Hauteur",
     "px": "px",
+    "ratio": "Proportion",
     "info": "Informations",
     "format": "Format",
     "resize": "Redimensionner",
@@ -93,7 +118,14 @@
     "errorProcessingImage": "Erreur lors du traitement de l'image",
     "errorResize": "Entrez une largeur et une hauteur valides",
     "saved": "Sauvegardé",
-    "imageSaved": "Image sauvegardée avec succès"
+    "imageSaved": "Image sauvegardée avec succès",
+    "dropHere": "Déposez l'image ici",
+    "dropActive": "Relâchez pour charger l'image",
+    "shortcutOpen": "Ctrl+O pour ouvrir",
+    "shortcutSave": "Ctrl+Shift+S pour redimensionner",
+    "shortcutClear": "Ctrl+L pour effacer",
+    "quality": "Qualité",
+    "qualityHint": "JPEG uniquement"
   },
   "de": {
     "appTitle": "Imgro",
@@ -105,6 +137,7 @@
     "newWidth": "Neue Breite",
     "newHeight": "Neue Höhe",
     "px": "px",
+    "ratio": "Verhältnis",
     "info": "Informationen",
     "format": "Format",
     "resize": "Größe Ändern",
@@ -117,7 +150,14 @@
     "errorProcessingImage": "Fehler bei der Bildverarbeitung",
     "errorResize": "Geben Sie gültige Breite und Höhe ein",
     "saved": "Gespeichert",
-    "imageSaved": "Bild erfolgreich gespeichert"
+    "imageSaved": "Bild erfolgreich gespeichert",
+    "dropHere": "Bild hier ablegen",
+    "dropActive": "Loslassen zum Laden",
+    "shortcutOpen": "Strg+O zum Öffnen",
+    "shortcutSave": "Strg+Umschalt+S zur Größenänderung",
+    "shortcutClear": "Strg+L zum Löschen",
+    "quality": "Qualität",
+    "qualityHint": "Nur JPEG"
   },
   "ja": {
     "appTitle": "Imgro",
@@ -129,6 +169,7 @@
     "newWidth": "新しい幅",
     "newHeight": "新しい高さ",
     "px": "px",
+    "ratio": "アスペクト比",
     "info": "情報",
     "format": "フォーマット",
     "resize": "リサイズ",
@@ -141,7 +182,14 @@
     "errorProcessingImage": "画像処理エラー",
     "errorResize": "有効な幅と高さを入力してください",
     "saved": "保存しました",
-    "imageSaved": "画像が正常に保存されました"
+    "imageSaved": "画像が正常に保存されました",
+    "dropHere": "ここに画像をドロップ",
+    "dropActive": "離して画像を読み込む",
+    "shortcutOpen": "Ctrl+Oで開く",
+    "shortcutSave": "Ctrl+Shift+Sでリサイズ",
+    "shortcutClear": "Ctrl+Lでクリア",
+    "quality": "品質",
+    "qualityHint": "JPEGのみ"
   },
   "zh": {
     "appTitle": "Imgro",
@@ -153,6 +201,7 @@
     "newWidth": "新宽度",
     "newHeight": "新高度",
     "px": "像素",
+    "ratio": "宽高比",
     "info": "信息",
     "format": "格式",
     "resize": "调整大小",
@@ -165,6 +214,13 @@
     "errorProcessingImage": "处理图片错误",
     "errorResize": "请输入有效的宽度和高度",
     "saved": "已保存",
-    "imageSaved": "图片保存成功"
+    "imageSaved": "图片保存成功",
+    "dropHere": "将图片拖放到这里",
+    "dropActive": "松开以加载图片",
+    "shortcutOpen": "Ctrl+O 打开",
+    "shortcutSave": "Ctrl+Shift+S 调整大小",
+    "shortcutClear": "Ctrl+L 清除",
+    "quality": "质量",
+    "qualityHint": "仅JPEG"
   }
 }

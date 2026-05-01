@@ -20,6 +20,7 @@
   "build": {
     "appId": "com.redimensionador.app",
     "productName": "Redimensionador de Imagens",
+    "icon": "C:\\Users\\Osvaldo\\Downloads\\ChatGPT Image 1 de mai. de 2026, 11_40_27.png",
     "directories": {
       "output": "dist"
     },
@@ -33,7 +34,9 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     },
     "files": [
       "main.js",

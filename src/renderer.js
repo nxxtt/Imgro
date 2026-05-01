@@ -1,4 +1,5 @@
 let currentFilePath = null;
+let currentDataUrl = null;
 let originalWidth = 0;
 let originalHeight = 0;
 let originalFormat = '';
@@ -13,7 +14,7 @@ const formatInfo = document.getElementById('format-info');
 const fileInfo = document.getElementById('file-info');
 const statusText = document.getElementById('status-text');
 const previewImage = document.getElementById('preview-image');
-const canvasArea = document.getElementById('canvas-area');
+const emptyState = document.getElementById('empty-state');
 
 btnSelect.addEventListener('click', async () => {
   const filepath = await window.electronAPI.selectImage();
@@ -23,7 +24,7 @@ btnSelect.addEventListener('click', async () => {
 });
 
 btnResize.addEventListener('click', async () => {
-  if (!currentFilePath) return;
+  if (!currentFilePath || !currentDataUrl) return;
 
   const width = parseInt(inputWidth.value);
   const height = parseInt(inputHeight.value);
@@ -36,25 +37,48 @@ btnResize.addEventListener('click', async () => {
   btnResize.disabled = true;
   btnResize.innerHTML = '<span class="icon">⏳</span> Processando...';
 
-  const result = await window.electronAPI.resizeImage({
-    filepath: currentFilePath,
-    width: width,
-    height: height
-  });
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  
+  const img = new Image();
+  img.onload = async function() {
+    ctx.drawImage(img, 0, 0, width, height);
+    
+    const ext = currentFilePath.split('.').pop().toLowerCase();
+    const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';
+    const resizedBase64 = canvas.toDataURL(mimeType, 0.9);
 
-  if (result.success) {
-    showStatus(`✓ Salvo: ${result.filename}`, 'success');
-    await loadPreview(result.filepath);
-  } else {
-    showStatus(`Erro: ${result.error}`, 'error');
-  }
+    const result = await window.electronAPI.resizeImage({
+      filepath: currentFilePath,
+      width: width,
+      height: height,
+      base64Data: resizedBase64,
+      format: originalFormat
+    });
 
-  btnResize.disabled = false;
-  btnResize.innerHTML = '<span class="icon">✓</span> Redimensionar';
+    if (result.success) {
+      showStatus(`✓ Salvo: ${result.filename}`, 'success');
+      previewImage.src = resizedBase64;
+    } else {
+      showStatus(`Erro: ${result.error}`, 'error');
+    }
+
+    btnResize.disabled = false;
+    btnResize.innerHTML = '<span class="icon">✓</span> Redimensionar';
+  };
+  img.onerror = function() {
+    showStatus('Erro ao processar imagem', 'error');
+    btnResize.disabled = false;
+    btnResize.innerHTML = '<span class="icon">✓</span> Redimensionar';
+  };
+  img.src = currentDataUrl;
 });
 
 btnClear.addEventListener('click', () => {
   currentFilePath = null;
+  currentDataUrl = null;
   originalWidth = 0;
   originalHeight = 0;
   originalFormat = '';
@@ -65,6 +89,8 @@ btnClear.addEventListener('click', () => {
   formatInfo.textContent = '-';
   fileInfo.innerHTML = '<span class="label">Nenhum arquivo selecionado</span>';
   previewImage.classList.add('hidden');
+  previewImage.src = '';
+  emptyState.style.display = 'flex';
   btnResize.disabled = true;
   showStatus('', '');
 });
@@ -76,43 +102,42 @@ async function loadImage(filepath) {
   currentFilePath = filepath;
 
   const info = await window.electronAPI.getImageInfo(filepath);
-  if (!info) {
+  if (!info || !info.dataUrl) {
     showStatus('Erro ao carregar imagem', 'error');
     return;
   }
 
-  originalWidth = info.width;
-  originalHeight = info.height;
+  currentDataUrl = info.dataUrl;
   originalFormat = info.format;
 
-  originalDims.textContent = `${originalWidth} x ${originalHeight} px`;
-  formatInfo.textContent = originalFormat;
+  const img = new Image();
+  img.onload = function() {
+    originalWidth = this.width;
+    originalHeight = this.height;
 
-  const filename = filepath.split(/[/\\]/).pop();
-  fileInfo.innerHTML = `<span class="filename">${filename}</span>`;
+    originalDims.textContent = `${originalWidth} x ${originalHeight} px`;
+    formatInfo.textContent = originalFormat;
 
-  inputWidth.value = originalWidth;
-  inputHeight.value = originalHeight;
+    const filename = filepath.split(/[/\\]/).pop();
+    fileInfo.innerHTML = `<span class="filename">${filename}</span>`;
 
-  await loadPreview(filepath);
+    inputWidth.value = originalWidth;
+    inputHeight.value = originalHeight;
 
-  btnResize.disabled = false;
-  showStatus('Imagem carregada', 'success');
-}
+    previewImage.src = currentDataUrl;
+    previewImage.classList.remove('hidden');
+    emptyState.style.display = 'none';
 
-async function loadPreview(filepath) {
-  const base64 = await window.electronAPI.getPreviewBase64(filepath);
-  previewImage.src = base64;
-  previewImage.classList.remove('hidden');
+    btnResize.disabled = false;
+    showStatus('Imagem carregada', 'success');
+  };
+  img.onerror = function() {
+    showStatus('Erro ao carregar imagem', 'error');
+  };
+  img.src = currentDataUrl;
 }
 
 function updatePreview() {
-  const width = parseInt(inputWidth.value) || 0;
-  const height = parseInt(inputHeight.value) || 0;
-
-  if (width > 0 && height > 0 && currentFilePath) {
-    const previewUrl = `file://${currentFilePath}`;
-  }
 }
 
 function showStatus(message, type) {

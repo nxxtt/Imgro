@@ -48,29 +48,33 @@ ipcMain.handle('select-image', async () => {
 
 ipcMain.handle('get-image-info', async (event, filepath) => {
   try {
-    const Jimp = require('jimp');
-    const image = await Jimp.read(filepath);
+    const fs = require('fs');
+    const data = fs.readFileSync(filepath);
     const ext = path.extname(filepath).toLowerCase();
     let format = 'JPEG';
     if (ext === '.png') format = 'PNG';
     else if (ext === '.bmp') format = 'BMP';
     else if (ext === '.gif') format = 'GIF';
+    else if (ext === '.webp') format = 'WEBP';
+    
+    const base64 = data.toString('base64');
+    const mime = ext === '.png' ? 'image/png' : 
+                 ext === '.gif' ? 'image/gif' : 
+                 ext === '.bmp' ? 'image/bmp' : 'image/jpeg';
+    
     return {
-      width: image.width,
-      height: image.height,
-      format: format
+      width: 0,
+      height: 0,
+      format: format,
+      dataUrl: `data:${mime};base64,${base64}`
     };
   } catch (error) {
     return null;
   }
 });
 
-ipcMain.handle('resize-image', async (event, { filepath, width, height }) => {
+ipcMain.handle('resize-image', async (event, { filepath, width, height, base64Data, format }) => {
   try {
-    const Jimp = require('jimp');
-    const image = await Jimp.read(filepath);
-    image.resize(width, height);
-    
     const dir = path.dirname(filepath);
     const basename = path.basename(filepath);
     const ext = path.extname(basename).toLowerCase();
@@ -87,12 +91,8 @@ ipcMain.handle('resize-image', async (event, { filepath, width, height }) => {
       counter++;
     }
 
-    let mimeType = Jimp.MIME_JPEG;
-    if (ext === '.png') mimeType = Jimp.MIME_PNG;
-    else if (ext === '.bmp') mimeType = Jimp.MIME_BMP;
-    else if (ext === '.gif') mimeType = Jimp.MIME_GIF;
-
-    await image.writeAsync(newFilepath);
+    const buffer = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+    fs.writeFileSync(newFilepath, buffer);
 
     return { success: true, filepath: newFilepath, filename: newFilename };
   } catch (error) {

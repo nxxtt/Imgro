@@ -33,7 +33,7 @@ npm run build
 ## Tecnologias
 
 - Electron
-- Jimp (processamento de imagens)
+- HTML5 Canvas (processamento de imagens)
 - HTML/CSS/JS
 
 ## Requisitos

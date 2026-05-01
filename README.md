@@ -1,33 +1,41 @@
 # Redimensionador de Imagens
 
-Aplicação para redimensionar imagens para qualquer resolução (pode distorcer).
-
-## Instalação
-
-```bash
-cd C:\Users\Osvaldo\Desktop\modificador_resolucao
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-```
+Aplicação desktop para redimensionar imagens para qualquer resolução (pode distorcer). Interface estilo Photoshop.
 
 ## Como Usar
 
+### Executável (Recomendado)
+- Execute `dist\win-unpacked\Redimensionador de Imagens.exe` diretamente
+
+### Ou instale
+- Execute `dist\Redimensionador de Imagens Setup 1.0.0.exe` para instalar
+
+### Desenvolvimento
 ```bash
-python app.py
+npm install
+npm start
 ```
 
-1. Clique em "Procurar" e selecione uma imagem
-2. Informe a nova largura e altura em pixels
-3. Clique em "Redimensionar"
-4. A imagem será salva na mesma pasta com sufixo `_modificado`
+### Compilar
+```bash
+npm run build
+```
 
-## Formato de Saída
+## Funcionalidades
 
-- Preserva o formato original (jpg→jpg, png→png)
-- Nome do arquivo: `{nome_original}_modificado.{extensao}`
+- Interface estilo Photoshop (dark theme)
+- Selecionar imagem via diálogo
+- Redimensionamento forçado (pode distorcer)
+- Preview da imagem
+- Preserva formato original (jpg→jpg, png→png)
+- Nome automático: `{nome}_modificado.ext`, `{nome}_modificado2.ext`, etc.
+
+## Tecnologias
+
+- Electron
+- Jimp (processamento de imagens)
+- HTML/CSS/JS
 
 ## Requisitos
 
-- Python 3.7+
-- Windows
+- Windows 10/11 (x64)

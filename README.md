@@ -1,41 +1,42 @@
-# Redimensionador de Imagens
+# Imgro
 
-Aplicação desktop para redimensionar imagens para qualquer resolução (pode distorcer). Interface estilo Photoshop.
+Desktop application to resize images to any resolution (may distort). Photoshop-style interface.
 
-## Como Usar
+## How to Use
 
-### Executável (Recomendado)
-- Execute `dist\win-unpacked\Redimensionador de Imagens.exe` diretamente
+### Portable (Recommended)
+- Run `dist\Imgrop.exe` directly (no installation needed)
 
-### Ou instale
-- Execute `dist\Redimensionador de Imagens Setup 1.0.0.exe` para instalar
+### Installer
+- Run `dist\ImgroSetup.exe` to install
 
-### Desenvolvimento
+### Development
 ```bash
 npm install
 npm start
 ```
 
-### Compilar
+### Build
 ```bash
 npm run build
 ```
 
-## Funcionalidades
+## Features
 
-- Interface estilo Photoshop (dark theme)
-- Selecionar imagem via diálogo
-- Redimensionamento forçado (pode distorcer)
-- Preview da imagem
-- Preserva formato original (jpg→jpg, png→png)
-- Nome automático: `{nome}_modificado.ext`, `{nome}_modificado2.ext`, etc.
+- Photoshop-style interface (dark theme)
+- 7 languages (EN, PT-BR, ES, FR, DE, JA, ZH)
+- Select image via dialog
+- Forced resizing (may distort)
+- Image preview
+- Preserves original format (jpg→jpg, png→png)
+- Automatic naming: `{name}_modified.ext`, `{name}_modified2.ext`, etc.
 
-## Tecnologias
+## Technologies
 
 - Electron
-- HTML5 Canvas (processamento de imagens)
+- HTML5 Canvas (image processing)
 - HTML/CSS/JS
 
-## Requisitos
+## Requirements
 
 - Windows 10/11 (x64)

@@ -1,7 +1,7 @@
 {
-  "name": "redimensionador-imagens",
+  "name": "imgro",
   "version": "1.0.0",
-  "description": "Redimensionador de Imagens - Estilo Photoshop",
+  "description": "Imgro - Image Resizer",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -11,12 +11,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^33.4.0",
-    "electron-builder": "^25.1.8"
+    "electron": "^41.4.0",
+    "electron-builder": "^26.9.0"
   },
   "build": {
-    "appId": "com.redimensionador.app",
-    "productName": "Redimensionador de Imagens",
+    "appId": "com.imgro.app",
+    "productName": "Imgro",
     "icon": "C:\\Users\\Osvaldo\\Downloads\\ChatGPT Image 1 de mai. de 2026, 11_40_27.png",
     "directories": {
       "output": "dist"
@@ -26,15 +26,24 @@
         {
           "target": "nsis",
           "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
         }
       ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "useZip": true
+      "createDesktopShortcut": "always",
+      "installerLanguages": ["en-US"],
+      "language": "1033",
+      "artifactName": "ImgroSetup.exe"
+    },
+    "portable": {
+      "artifactName": "Imgrop.exe"
     },
     "asar": true,
     "files": [

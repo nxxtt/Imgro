@@ -30,6 +30,30 @@ body {
   padding: 10px 0 20px 0;
 }
 
+.lang-selector {
+  margin-bottom: 10px;
+}
+
+.lang-selector select {
+  width: 100%;
+  padding: 8px 10px;
+  background-color: #3c3c3c;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  color: #d4d4d4;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.lang-selector select:hover {
+  border-color: #0099ff;
+}
+
+.lang-selector select:focus {
+  outline: none;
+  border-color: #0099ff;
+}
+
 .sidebar-header h1 {
   font-size: 16px;
   font-weight: 600;

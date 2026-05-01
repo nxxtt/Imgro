@@ -1,3 +1,6 @@
+let translations = {};
+let currentLang = localStorage.getItem('lang') || 'en';
+
 let currentFilePath = null;
 let currentDataUrl = null;
 let originalFormat = '';
@@ -13,6 +16,46 @@ const fileInfo = document.getElementById('file-info');
 const statusText = document.getElementById('status-text');
 const previewImage = document.getElementById('preview-image');
 const emptyState = document.getElementById('empty-state');
+const langSelect = document.getElementById('lang-select');
+
+async function loadTranslations() {
+  const response = await fetch('translations.json');
+  translations = await response.json();
+  applyTranslations();
+}
+
+function t(key) {
+  return translations[currentLang]?.[key] || translations['pt-BR']?.[key] || key;
+}
+
+function applyTranslations() {
+  document.getElementById('btn-select').innerHTML = `<span class="icon">📂</span> ${t('openImage')}`;
+  document.getElementById('btn-resize').innerHTML = `<span class="icon">✓</span> ${t('resize')}`;
+  document.getElementById('btn-clear').innerHTML = `<span class="icon">↺</span> ${t('clear')}`;
+  document.querySelector('.panel-header').textContent = t('file');
+  document.querySelectorAll('.panel-header')[1].textContent = t('dimensions');
+  document.querySelectorAll('.panel-header')[2].textContent = t('info');
+  document.querySelector('.sidebar-header h1').textContent = t('appTitle');
+  
+  const emptyText = document.querySelector('.empty-state p');
+  if (emptyText) emptyText.textContent = t('dragOrClick');
+  
+  const labels = document.querySelectorAll('.dimension-row label');
+  if (labels[0]) labels[0].textContent = t('original') + ':';
+  if (labels[1]) labels[1].textContent = t('newWidth') + ':';
+  if (labels[2]) labels[2].textContent = t('newHeight') + ':';
+  if (labels[3]) labels[3].textContent = t('format') + ':';
+  
+  if (!fileInfo.querySelector('.label')) {
+    fileInfo.innerHTML = `<span class="label">${t('noFileSelected')}</span>`;
+  }
+}
+
+langSelect.addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  localStorage.setItem('lang', currentLang);
+  applyTranslations();
+});
 
 btnSelect.addEventListener('click', async () => {
   const filepath = await window.electronAPI.selectImage();
@@ -28,12 +71,12 @@ btnResize.addEventListener('click', async () => {
   const height = parseInt(inputHeight.value);
 
   if (!width || !height || width < 1 || height < 1) {
-    showStatus('Informe largura e altura válidas', 'error');
+    showStatus(t('errorResize'), 'error');
     return;
   }
 
   btnResize.disabled = true;
-  btnResize.innerHTML = '<span class="icon">⏳</span> Processando...';
+  btnResize.innerHTML = `<span class="icon">⏳</span> ${t('processing')}`;
 
   const canvas = document.createElement('canvas');
   canvas.width = width;
@@ -57,19 +100,19 @@ btnResize.addEventListener('click', async () => {
     });
 
     if (result.success) {
-      showStatus(`✓ Salvo: ${result.filename}`, 'success');
+      showStatus(`${t('saved')}: ${result.filename}`, 'success');
       previewImage.src = resizedBase64;
     } else {
-      showStatus(`Erro: ${result.error}`, 'error');
+      showStatus(`${t('errorProcessingImage')}: ${result.error}`, 'error');
     }
 
     btnResize.disabled = false;
-    btnResize.innerHTML = '<span class="icon">✓</span> Redimensionar';
+    btnResize.innerHTML = `<span class="icon">✓</span> ${t('resize')}`;
   };
   img.onerror = function() {
-    showStatus('Erro ao processar imagem', 'error');
+    showStatus(t('errorProcessingImage'), 'error');
     btnResize.disabled = false;
-    btnResize.innerHTML = '<span class="icon">✓</span> Redimensionar';
+    btnResize.innerHTML = `<span class="icon">✓</span> ${t('resize')}`;
   };
   img.src = currentDataUrl;
 });
@@ -83,7 +126,7 @@ btnClear.addEventListener('click', () => {
   inputHeight.value = '';
   originalDims.textContent = '-';
   formatInfo.textContent = '-';
-  fileInfo.innerHTML = '<span class="label">Nenhum arquivo selecionado</span>';
+  fileInfo.innerHTML = `<span class="label">${t('noFileSelected')}</span>`;
   previewImage.classList.add('hidden');
   previewImage.src = '';
   emptyState.style.display = 'flex';
@@ -96,7 +139,7 @@ async function loadImage(filepath) {
 
   const info = await window.electronAPI.getImageInfo(filepath);
   if (!info || !info.dataUrl) {
-    showStatus('Erro ao carregar imagem', 'error');
+    showStatus(t('errorLoadingImage'), 'error');
     return;
   }
 
@@ -105,10 +148,10 @@ async function loadImage(filepath) {
 
   const img = new Image();
   img.onload = function() {
-    originalWidth = this.width;
-    originalHeight = this.height;
+    const originalWidth = this.width;
+    const originalHeight = this.height;
 
-    originalDims.textContent = `${originalWidth} x ${originalHeight} px`;
+    originalDims.textContent = `${originalWidth} x ${originalHeight} ${t('px')}`;
     formatInfo.textContent = originalFormat;
 
     const filename = filepath.split(/[/\\]/).pop();
@@ -122,10 +165,10 @@ async function loadImage(filepath) {
     emptyState.style.display = 'none';
 
     btnResize.disabled = false;
-    showStatus('Imagem carregada', 'success');
+    showStatus(t('imageLoaded'), 'success');
   };
   img.onerror = function() {
-    showStatus('Erro ao carregar imagem', 'error');
+    showStatus(t('errorLoadingImage'), 'error');
   };
   img.src = currentDataUrl;
 }
@@ -137,3 +180,7 @@ function showStatus(message, type) {
     statusText.parentElement.classList.add(type);
   }
 }
+
+loadTranslations().then(() => {
+  langSelect.value = currentLang;
+});

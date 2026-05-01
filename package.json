@@ -1,6 +1,6 @@
 {
   "name": "imgro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Imgro - Image Resizer",
   "main": "main.js",
   "scripts": {

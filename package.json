@@ -1,0 +1,44 @@
+{
+  "name": "redimensionador-imagens",
+  "version": "1.0.0",
+  "description": "Redimensionador de Imagens - Estilo Photoshop",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "pack": "electron-builder --dir"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "jimp": "^1.6.0"
+  },
+  "build": {
+    "appId": "com.redimensionador.app",
+    "productName": "Redimensionador de Imagens",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*"
+    ]
+  }
+}

@@ -1,0 +1,275 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background-color: #252526;
+  border-right: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.sidebar-header {
+  padding: 10px 0 20px 0;
+}
+
+.sidebar-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0099ff;
+  letter-spacing: 0.5px;
+}
+
+.panel {
+  background-color: #2d2d2d;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.panel-header {
+  background: linear-gradient(180deg, #3c3c3c 0%, #333333 100%);
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #b0b0b0;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.panel-content {
+  padding: 12px;
+}
+
+.file-info {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #1e1e1e;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #858585;
+  word-break: break-all;
+}
+
+.file-info .label {
+  display: block;
+  font-style: italic;
+}
+
+.file-info .filename {
+  color: #d4d4d4;
+  font-weight: 500;
+}
+
+.dimension-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dimension-row label {
+  font-size: 12px;
+  color: #9d9d9d;
+}
+
+.dimension-row .value {
+  font-size: 12px;
+  color: #0099ff;
+  font-weight: 500;
+}
+
+.input {
+  width: 80px;
+  padding: 6px 8px;
+  background-color: #3c3c3c;
+  border: 1px solid #555555;
+  border-radius: 3px;
+  color: #d4d4d4;
+  font-size: 13px;
+  text-align: right;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0099ff;
+}
+
+.input::placeholder {
+  color: #666666;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn .icon {
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #007acc 0%, #0062a3 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #0088e0 0%, #007acc 100%);
+}
+
+.btn-success {
+  background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+  color: white;
+}
+
+.btn-success:hover {
+  background: linear-gradient(180deg, #5cb860 0%, #4caf50 100%);
+}
+
+.btn-success:disabled {
+  background: #3c3c3c;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: #3c3c3c;
+  color: #d4d4d4;
+}
+
+.btn-secondary:hover {
+  background-color: #4a4a4a;
+}
+
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 15px;
+}
+
+.status-bar {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #007acc;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-bar.error {
+  background-color: #c62828;
+}
+
+.status-bar.success {
+  background-color: #2e7d32;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+}
+
+.workspace {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: repeating-linear-gradient(
+    45deg,
+    #1e1e1e,
+    #1e1e1e 10px,
+    #232323 10px,
+    #232323 20px
+  );
+}
+
+.canvas-area {
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: #666666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 14px;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: calc(100vh - 100px);
+  object-fit: contain;
+  border: 1px solid #3c3c3c;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.preview-image.hidden {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}

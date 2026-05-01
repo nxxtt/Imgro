@@ -1,6 +1,6 @@
 # Imgro
 
-Desktop application to resize images to any resolution (may distort). Photoshop-style interface.
+Desktop application to resize images to any resolution (may distort).
 
 ## How to Use
 

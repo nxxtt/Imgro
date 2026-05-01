@@ -5,10 +5,10 @@ Desktop application to resize images to any resolution (may distort). Photoshop-
 ## How to Use
 
 ### Portable (Recommended)
-- Run `dist\Imgrop.exe` directly (no installation needed)
+- Run `Imgrop.exe` directly (no installation needed)
 
 ### Installer
-- Run `dist\ImgroSetup.exe` to install
+- Run `ImgroSetup.exe` to install
 
 ### Development
 ```bash
@@ -23,7 +23,6 @@ npm run build
 
 ## Features
 
-- Photoshop-style interface (dark theme)
 - 7 languages (EN, PT-BR, ES, FR, DE, JA, ZH)
 - Select image via dialog
 - Forced resizing (may distort)

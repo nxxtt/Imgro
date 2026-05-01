@@ -31,7 +31,9 @@
           "target": "portable",
           "arch": ["x64"]
         }
-      ]
+      ],
+      "extraResources": [],
+      "extraFiles": []
     },
     "nsis": {
       "oneClick": false,

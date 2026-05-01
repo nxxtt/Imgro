@@ -25,7 +25,11 @@ async function loadTranslations() {
 }
 
 function t(key) {
-  return translations[currentLang]?.[key] || translations['pt-BR']?.[key] || key;
+  const langObj = translations[currentLang];
+  if (langObj && langObj[key]) return langObj[key];
+  const ptObj = translations['pt-BR'];
+  if (ptObj && ptObj[key]) return ptObj[key];
+  return key;
 }
 
 function applyTranslations() {

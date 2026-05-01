@@ -36,7 +36,7 @@ def main():
     sg.theme('LightGrey1')
     
     layout = [
-        [sg.Text('Selecionar Imagem:'), sg.Input(key='-FILE-', size=(40, 1)), sg.FileBrowse('Procurar', file_types=(('Imagens', '*.png;*.jpg;*.jpeg;*.bmp;*.gif'),))],
+        [sg.Text('Selecionar Imagem:'), sg.Input(key='-FILE-', size=(40, 1), enable_events=True), sg.FileBrowse('Procurar', file_types=(('Imagens', '*.png;*.jpg;*.jpeg;*.bmp;*.gif'),))],
         [sg.Text('Resolução Original:'), sg.Text('-', key='-ORIGINAL-', size=(15, 1)), sg.Text('Nova Largura:'), sg.InputText(key='-WIDTH-', size=(6, 1)), sg.Text('Nova Altura:'), sg.InputText(key='-HEIGHT-', size=(6, 1))],
         [sg.Button('Redimensionar', key='-RESIZE-', disabled=True), sg.Button('Limpar', key='-CLEAR-')],
         [sg.HorizontalSeparator()],

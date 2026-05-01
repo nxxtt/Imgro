@@ -1,7 +1,5 @@
 let currentFilePath = null;
 let currentDataUrl = null;
-let originalWidth = 0;
-let originalHeight = 0;
 let originalFormat = '';
 
 const btnSelect = document.getElementById('btn-select');
@@ -79,8 +77,6 @@ btnResize.addEventListener('click', async () => {
 btnClear.addEventListener('click', () => {
   currentFilePath = null;
   currentDataUrl = null;
-  originalWidth = 0;
-  originalHeight = 0;
   originalFormat = '';
 
   inputWidth.value = '';
@@ -94,9 +90,6 @@ btnClear.addEventListener('click', () => {
   btnResize.disabled = true;
   showStatus('', '');
 });
-
-inputWidth.addEventListener('input', updatePreview);
-inputHeight.addEventListener('input', updatePreview);
 
 async function loadImage(filepath) {
   currentFilePath = filepath;
@@ -135,9 +128,6 @@ async function loadImage(filepath) {
     showStatus('Erro ao carregar imagem', 'error');
   };
   img.src = currentDataUrl;
-}
-
-function updatePreview() {
 }
 
 function showStatus(message, type) {

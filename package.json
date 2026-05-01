@@ -14,9 +14,6 @@
     "electron": "^33.4.0",
     "electron-builder": "^25.1.8"
   },
-  "dependencies": {
-    "jimp": "^1.6.0"
-  },
   "build": {
     "appId": "com.redimensionador.app",
     "productName": "Redimensionador de Imagens",
@@ -36,8 +33,10 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "createStartMenuShortcut": true,
+      "useZip": true
     },
+    "asar": true,
     "files": [
       "main.js",
       "preload.js",

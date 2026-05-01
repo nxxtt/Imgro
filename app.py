@@ -19,8 +19,15 @@ def resize_image(filepath, width, height):
         if not ext:
             ext = '.png' if img.format == 'PNG' else '.jpg'
         
-        new_filename = f"{name}_modificado{ext}"
+        base_filename = f"{name}_modificado"
+        new_filename = f"{base_filename}{ext}"
         new_filepath = os.path.join(directory, new_filename)
+        
+        counter = 2
+        while os.path.exists(new_filepath):
+            new_filename = f"{base_filename}{counter}{ext}"
+            new_filepath = os.path.join(directory, new_filename)
+            counter += 1
         
         save_format = 'PNG' if ext == '.png' else 'JPEG'
         resized.save(new_filepath, format=save_format)

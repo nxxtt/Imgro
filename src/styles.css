@@ -1,8 +1,25 @@
+/**
+ * Imgro - Image Resizer Application
+ * Stylesheet
+ * 
+ * This file contains all CSS styles for the application:
+ * - Global reset and base styles
+ * - Layout (sidebar, main content)
+ * - Components (panels, buttons, inputs)
+ * - Utility classes
+ * - Responsive behavior
+ * - Dark theme (Photoshop-like)
+ */
+
+/* ==================== GLOBAL RESET ==================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+/* ==================== BASE STYLES ==================== */
 
 body {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -99,6 +116,30 @@ body {
   letter-spacing: 0.5px;
   color: #b0b0b0;
   border-bottom: 1px solid #1e1e1e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.panel-header::after {
+  content: '▼';
+  font-size: 10px;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.panel-header:hover {
+  background: linear-gradient(180deg, #444444 0%, #3c3c3c 100%);
+}
+
+.panel.collapsed .panel-header::after {
+  transform: rotate(-90deg);
+}
+
+.panel.collapsed .panel-content {
+  display: none;
 }
 
 .panel-content {
@@ -301,6 +342,12 @@ body {
 }
 
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   text-align: center;
   color: #666666;
 }
@@ -425,38 +472,140 @@ body {
   color: #d4d4d4;
 }
 
-.ratio-btn {
-  padding: 2px 5px;
-  font-size: 9px;
-  background-color: #3c3c3c;
+.ratio-btn.active {
+  background-color: #0099ff;
+  color: white;
+  border-color: #007acc;
+}
+
+.btn-small {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.batch-actions {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.batch-folder {
+  font-size: 10px;
+  color: #858585;
+  padding: 6px;
+  background: #1e1e1e;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.batch-files-info {
+  font-size: 11px;
   color: #9d9d9d;
-  border: 1px solid #555555;
-  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.batch-files-list {
+  max-height: 80px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border: 1px solid #3c3c3c;
+  border-radius: 3px;
+  padding: 4px;
+}
+
+.batch-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 6px;
+  font-size: 10px;
+  color: #d4d4d4;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.batch-file-item:last-child {
+  border-bottom: none;
+}
+
+.batch-file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.batch-remove-btn {
+  background: none;
+  border: none;
+  color: #c62828;
+  font-size: 14px;
   cursor: pointer;
-  min-width: 28px;
+  padding: 0 4px;
+}
+
+.batch-remove-btn:hover {
+  color: #f44336;
+}
+
+.batch-settings {
+  margin-bottom: 10px;
+}
+
+.batch-quality {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.batch-quality label {
+  font-size: 12px;
+  color: #9d9d9d;
+}
+
+.batch-quality .quality-slider {
+  flex: 1;
+}
+
+.batch-quality .quality-value {
+  font-size: 11px;
+  color: #0099ff;
+  min-width: 35px;
+}
+
+.batch-progress {
+  margin-top: 10px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #3c3c3c;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0099ff, #4caf50);
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 11px;
+  color: #9d9d9d;
   text-align: center;
+  display: block;
 }
 
-.ratio-btn:hover {
-  background-color: #4a4a4a;
-  border-color: #0099ff;
-  color: #d4d4d4;
+#panel-batch .panel-content {
+  display: flex;
+  flex-direction: column;
 }
 
-.ratio-btn.active {
-  background-color: #0099ff;
-  color: white;
-  border-color: #007acc;
-}
-
-.ratio-btn:hover {
-  background-color: #4a4a4a;
-  border-color: #0099ff;
-  color: #d4d4d4;
-}
-
-.ratio-btn.active {
-  background-color: #0099ff;
-  color: white;
-  border-color: #007acc;
+#panel-batch.collapsed .panel-content {
+  display: none !important;
 }

@@ -29,7 +29,19 @@
     "shortcutSave": "Ctrl+Shift+S to resize",
     "shortcutClear": "Ctrl+L to clear",
     "quality": "Quality",
-    "qualityHint": "JPEG only"
+    "qualityHint": "JPEG only",
+    "batch": "Batch",
+    "addFiles": "Add Files",
+    "selectFolder": "Select Folder",
+    "processAll": "Process All",
+    "clearBatch": "Clear List",
+    "filesCount": "{0} files",
+    "processingNofM": "Processing {0} of {1}...",
+    "batchComplete": "Batch complete: {0} images",
+    "noFolderSelected": "Select output folder",
+    "noFilesInBatch": "No files in batch",
+    "expand": "Expand",
+    "collapse": "Collapse"
   },
   "pt-BR": {
     "appTitle": "Imgro",
@@ -61,7 +73,19 @@
     "shortcutSave": "Ctrl+Shift+S para redimensionar",
     "shortcutClear": "Ctrl+L para limpar",
     "quality": "Qualidade",
-    "qualityHint": "Apenas JPEG"
+    "qualityHint": "Apenas JPEG",
+    "batch": "Lote",
+    "addFiles": "Adicionar Arquivos",
+    "selectFolder": "Selecionar Pasta",
+    "processAll": "Processar Todos",
+    "clearBatch": "Limpar Lista",
+    "filesCount": "{0} arquivos",
+    "processingNofM": "Processando {0} de {1}...",
+    "batchComplete": "Lote concluído: {0} imagens",
+    "noFolderSelected": "Selecione a pasta de saída",
+    "noFilesInBatch": "Nenhum arquivo no lote",
+    "expand": "Expandir",
+    "collapse": "Recolher"
   },
   "es": {
     "appTitle": "Imgro",
@@ -93,7 +117,19 @@
     "shortcutSave": "Ctrl+Shift+S para redimensionar",
     "shortcutClear": "Ctrl+L para limpiar",
     "quality": "Calidad",
-    "qualityHint": "Solo JPEG"
+    "qualityHint": "Solo JPEG",
+    "batch": "Lote",
+    "addFiles": "Añadir Archivos",
+    "selectFolder": "Seleccionar carpeta",
+    "processAll": "Procesar todos",
+    "clearBatch": "Limpiar lista",
+    "filesCount": "{0} archivos",
+    "processingNofM": "Procesando {0} de {1}...",
+    "batchComplete": "Lote completado: {0} imágenes",
+    "noFolderSelected": "Seleccione carpeta de salida",
+    "noFilesInBatch": "No hay archivos en el lote",
+    "expand": "Expandir",
+    "collapse": "Recoger"
   },
   "fr": {
     "appTitle": "Imgro",
@@ -125,7 +161,19 @@
     "shortcutSave": "Ctrl+Shift+S pour redimensionner",
     "shortcutClear": "Ctrl+L pour effacer",
     "quality": "Qualité",
-    "qualityHint": "JPEG uniquement"
+    "qualityHint": "JPEG uniquement",
+    "batch": "Lot",
+    "addFiles": "Ajouter des fichiers",
+    "selectFolder": "Sélectionner dossier",
+    "processAll": "Traiter tout",
+    "clearBatch": "Effacer liste",
+    "filesCount": "{0} fichiers",
+    "processingNofM": "Traitement {0} sur {1}...",
+    "batchComplete": "Lot terminé: {0} images",
+    "noFolderSelected": "Sélectionnez dossier de sortie",
+    "noFilesInBatch": "Aucun fichier dans le lot",
+    "expand": "Développer",
+    "collapse": "Réduire"
   },
   "de": {
     "appTitle": "Imgro",
@@ -157,7 +205,19 @@
     "shortcutSave": "Strg+Umschalt+S zur Größenänderung",
     "shortcutClear": "Strg+L zum Löschen",
     "quality": "Qualität",
-    "qualityHint": "Nur JPEG"
+    "qualityHint": "Nur JPEG",
+    "batch": "Stapel",
+    "addFiles": "Dateien hinzufügen",
+    "selectFolder": "Ordner wählen",
+    "processAll": "Alle verarbeiten",
+    "clearBatch": "Liste leeren",
+    "filesCount": "{0} Dateien",
+    "processingNofM": "Verarbeite {0} von {1}...",
+    "batchComplete": "Stapel abgeschlossen: {0} Bilder",
+    "noFolderSelected": "Ausgabeordner wählen",
+    "noFilesInBatch": "Keine Dateien im Stapel",
+    "expand": "Erweitern",
+    "collapse": "Einklappen"
   },
   "ja": {
     "appTitle": "Imgro",
@@ -189,7 +249,19 @@
     "shortcutSave": "Ctrl+Shift+Sでリサイズ",
     "shortcutClear": "Ctrl+Lでクリア",
     "quality": "品質",
-    "qualityHint": "JPEGのみ"
+    "qualityHint": "JPEGのみ",
+    "batch": "バッチ",
+    "addFiles": "ファイル追加",
+    "selectFolder": "フォルダ選択",
+    "processAll": "全て処理",
+    "clearBatch": "リストクリア",
+    "filesCount": "{0} ファイル",
+    "processingNofM": "{1} 中 {0} を処理中...",
+    "batchComplete": "バッチ完了: {0} 画像",
+    "noFolderSelected": "出力フォルダを選択",
+    "noFilesInBatch": "バッチにファイルがありません",
+    "expand": "展開",
+    "collapse": "折りたたむ"
   },
   "zh": {
     "appTitle": "Imgro",
@@ -221,6 +293,18 @@
     "shortcutSave": "Ctrl+Shift+S 调整大小",
     "shortcutClear": "Ctrl+L 清除",
     "quality": "质量",
-    "qualityHint": "仅JPEG"
+    "qualityHint": "仅JPEG",
+    "batch": "批量",
+    "addFiles": "添加文件",
+    "selectFolder": "选择文件夹",
+    "processAll": "全部处理",
+    "clearBatch": "清空列表",
+    "filesCount": "{0} 个文件",
+    "processingNofM": "正在处理 {0}/{1}...",
+    "batchComplete": "批量完成: {0} 张图片",
+    "noFolderSelected": "选择输出文件夹",
+    "noFilesInBatch": "批量中没有文件",
+    "expand": "展开",
+    "collapse": "收起"
   }
 }

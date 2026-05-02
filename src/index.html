@@ -83,6 +83,42 @@
         </div>
       </div>
 
+      <div class="panel" id="panel-batch">
+        <div class="panel-header" id="batch-header">Batch</div>
+        <div class="panel-content panel-scroll" style="max-height: 280px;">
+          <div class="batch-actions">
+            <button id="btn-add-files" class="btn btn-small" style="flex:1;">+ Add</button>
+            <button id="btn-select-folder" class="btn btn-small" style="flex:1;">Folder</button>
+            <button id="btn-clear-batch" class="btn btn-small btn-secondary" style="flex:1;">Clear</button>
+          </div>
+          <div class="batch-folder" id="batch-folder">No folder selected</div>
+          <div class="batch-files-info" id="batch-files-info">0 files</div>
+          <div class="batch-files-list" id="batch-files-list" style="max-height: 60px;"></div>
+          <div class="batch-settings">
+            <div class="dimension-row" style="margin-bottom:4px;">
+              <label id="batch-width-label">W:</label>
+              <input type="number" id="batch-width" class="input" style="width:60px;" min="1" value="800" placeholder="px">
+            </div>
+            <div class="dimension-row" style="margin-bottom:4px;">
+              <label id="batch-height-label">H:</label>
+              <input type="number" id="batch-height" class="input" style="width:60px;" min="1" value="600" placeholder="px">
+            </div>
+            <div class="batch-quality" style="margin-top:4px;">
+              <label id="batch-quality-label">Q:</label>
+              <input type="range" id="batch-quality" class="quality-slider" style="width:60px;" min="1" max="100" value="90">
+              <span id="batch-quality-value">90%</span>
+            </div>
+          </div>
+          <button id="btn-process-batch" class="btn btn-success" style="margin-top:8px;" disabled>
+            Process All
+          </button>
+          <div class="batch-progress" id="batch-progress" style="display: none;">
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+            <span class="progress-text" id="progress-text">0/0</span>
+          </div>
+        </div>
+      </div>
+
       <div class="sidebar-actions">
         <button id="btn-resize" class="btn btn-success" disabled>
           <span class="icon">✓</span> Resize

@@ -8,6 +8,9 @@
   - **renderer.js**: Documented global state, helper functions, DOM elements, batch processing, image loading, live preview, and accordion panels
   - **styles.css**: Added header with CSS structure overview and section organization
 
+### Fixed
+- Dialog filter extension bug: removed dots from extension array (`.png` → `png`) to prevent `..extensao` showing in file dialog
+
 ### Code Organization
 - Added section dividers using `// ==================== SECTION NAME ====================` pattern
 - Organized renderer.js into clear functional groups:

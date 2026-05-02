@@ -23,8 +23,8 @@ const fsPromises = fs.promises;
 const formatMap = { '.png': 'PNG', '.bmp': 'BMP', '.gif': 'GIF', '.webp': 'WEBP' };
 const mimeMap = { '.png': 'image/png', '.gif': 'image/gif', '.bmp': 'image/bmp', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
 
-// Valid image file extensions
-const validImageExtensions = ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.webp'];
+// Valid image file extensions (without dots for Electron dialog filter)
+const validImageExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp'];
 
 // ==================== APP OPTIMIZATIONS ====================
 

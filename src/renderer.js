@@ -378,8 +378,14 @@ function applyTranslations() {
     qualitySlider.title = t('qualityHint');
   }
   
+  // Preserve file info when changing language (don't reset to "noFileSelected")
   const labelEl = fileInfo.querySelector('.label');
-  if (labelEl) {
+  const filenameEl = fileInfo.querySelector('.filename');
+  
+  if (currentFilePath) {
+    const filename = currentFilePath.split(/[/\\]/).pop();
+    fileInfo.innerHTML = `<span class="filename">${filename}</span>`;
+  } else if (labelEl) {
     labelEl.textContent = t('noFileSelected');
   } else {
     fileInfo.innerHTML = `<span class="label">${t('noFileSelected')}</span>`;

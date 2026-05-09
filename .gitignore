@@ -25,3 +25,6 @@ Thumbs.db
 
 # Build
 build/
+
+# Build outputs
+dist-v4/

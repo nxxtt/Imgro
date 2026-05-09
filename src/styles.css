@@ -1,17 +1,27 @@
 /**
- * Imgro - Image Resizer Application
+ * @file styles.css
+ * @description Imgro - Image Resizer Application
  * Stylesheet
- * 
+ *
  * This file contains all CSS styles for the application:
  * - Global reset and base styles
  * - Layout (sidebar, main content)
- * - Components (panels, buttons, inputs)
+ * - Components (panels, buttons, inputs, sliders)
  * - Utility classes
  * - Responsive behavior
  * - Dark theme (Photoshop-like)
+ *
+ * Color Palette:
+ * - Background: #1e1e1e, #252526, #2d2d2d, #3c3c3c
+ * - Text: #d4d4d4, #9d9d9d, #858585
+ * - Accent: #0099ff (blue), #4caf50 (green), #c62828 (red)
+ *
+ * @module Imgro/Styles
+ * @version 1.1.0
  */
 
 /* ==================== GLOBAL RESET ==================== */
+/* Reset all default margins, paddings, and set box-sizing */
 
 * {
   margin: 0;
@@ -20,6 +30,7 @@
 }
 
 /* ==================== BASE STYLES ==================== */
+/* Base typography and background colors */
 
 body {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -233,6 +244,12 @@ body {
   font-size: 14px;
 }
 
+.icon-svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .btn .shortcut {
   font-size: 10px;
   opacity: 0.7;
@@ -353,9 +370,11 @@ body {
 }
 
 .empty-icon {
-  font-size: 64px;
+  width: 80px;
+  height: 80px;
   margin-bottom: 15px;
   opacity: 0.5;
+  color: #666;
 }
 
 .empty-state p {
@@ -483,6 +502,18 @@ body {
   font-size: 11px;
 }
 
+.transform-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.transform-btn {
+  flex: 1;
+  min-width: 40px;
+  font-size: 16px;
+}
+
 .batch-actions {
   display: flex;
   gap: 5px;
@@ -606,6 +637,378 @@ body {
   flex-direction: column;
 }
 
+.filter-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.filter-row label {
+  width: 80px;
+  font-size: 11px;
+  color: #9d9d9d;
+}
+
+.filter-slider {
+  flex: 1;
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.filter-row span {
+  width: 40px;
+  text-align: right;
+  font-size: 11px;
+  color: #9d9d9d;
+}
+
 #panel-batch.collapsed .panel-content {
-  display: none !important;
+  display: none;
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.format-row label {
+  width: 60px;
+  font-size: 11px;
+  color: #9d9d9d;
+}
+
+.format-row select {
+  flex: 1;
+  background: #2d2d2d;
+  color: #d4d4d4;
+  border: 1px solid #3c3c3c;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ==================== PANEL ICONS ==================== */
+
+.panel-icon {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+.panel-header {
+  position: relative;
+}
+
+.panel-header .panel-icon {
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.panel-header:hover .panel-icon {
+  opacity: 1;
+}
+
+/* ==================== ZOOM CONTROLS ==================== */
+
+.zoom-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2d2d2d;
+  padding: 6px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.workspace:hover .zoom-controls {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.zoom-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #3c3c3c;
+  color: #d4d4d4;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.zoom-btn:hover {
+  background: #0099ff;
+  color: white;
+}
+
+.zoom-btn:active {
+  transform: scale(0.95);
+}
+
+#zoom-level {
+  font-size: 12px;
+  color: #0099ff;
+  min-width: 45px;
+  text-align: center;
+}
+
+/* ==================== LOADING SPINNER ==================== */
+
+.loading-spinner {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+}
+
+.loading-spinner.active {
+  display: flex;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #3c3c3c;
+  border-top: 3px solid #0099ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner span {
+  margin-top: 10px;
+  color: #0099ff;
+  font-size: 13px;
+}
+
+/* ==================== BUTTON ANIMATIONS ==================== */
+
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.btn:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+.btn {
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== PANEL TRANSITIONS ==================== */
+
+.panel-header {
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.panel-content {
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+
+.panel.collapsed .panel-content {
+  max-height: 0;
+  padding: 0 12px;
+  opacity: 0;
+}
+
+.panel:not(.collapsed) .panel-content {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* ==================== ENHANCED STATUS BAR ==================== */
+
+.status-bar {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.status-bar.show {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.status-bar.error {
+  background: linear-gradient(180deg, #d32f2f 0%, #b71c1c 100%);
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.4);
+}
+
+.status-bar.success {
+  background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.4);
+}
+
+.status-bar.info {
+  background: linear-gradient(180deg, #0099ff 0%, #007acc 100%);
+  box-shadow: 0 2px 8px rgba(0, 153, 255, 0.4);
+}
+
+/* ==================== PREVIEW ENHANCEMENTS ==================== */
+
+.preview-image {
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.preview-image.zoomed {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 153, 255, 0.3);
+}
+
+/* ==================== PROGRESS BAR ANIMATION ==================== */
+
+.progress-fill {
+  background: linear-gradient(90deg, #0099ff, #4caf50, #0099ff);
+  background-size: 200% 100%;
+  animation: progressGradient 2s linear infinite;
+}
+
+@keyframes progressGradient {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ==================== KEYBOARD SHORTCUT HIGHLIGHTS ==================== */
+
+.btn .shortcut {
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-left: auto;
+  padding: 2px 6px;
+  background-color: rgba(0, 153, 255, 0.2);
+  border: 1px solid rgba(0, 153, 255, 0.4);
+  border-radius: 3px;
+  color: #0099ff;
+}
+
+/* ==================== TOOLTIP STYLES ==================== */
+
+[title] {
+  position: relative;
+}
+
+/* ==================== INPUT FOCUS ENHANCEMENTS ==================== */
+
+.input:focus,
+select:focus {
+  box-shadow: 0 0 0 2px rgba(0, 153, 255, 0.3);
+}
+
+/* ==================== RATIO BUTTON HOVER ==================== */
+
+.ratio-btn {
+  transition: all 0.2s ease;
+}
+
+.ratio-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ratio-btn.active {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 153, 255, 0.4);
+}
+
+/* ==================== TRANSFORM BUTTONS ==================== */
+
+.transform-btn {
+  transition: all 0.2s ease;
+}
+
+.transform-btn:hover {
+  transform: rotate(5deg) scale(1.1);
+}
+
+#btn-flip-h:hover {
+  transform: scaleX(1.2);
+}
+
+#btn-flip-v:hover {
+  transform: scaleY(1.2);
+}
+
+/* ==================== HOVER EFFECTS ON BATCH ==================== */
+
+.batch-file-item {
+  transition: background 0.2s;
+}
+
+.batch-file-item:hover {
+  background: #3c3c3c;
+}
+
+.batch-remove-btn {
+  transition: transform 0.2s;
+}
+
+.batch-remove-btn:hover {
+  transform: scale(1.2);
+}
+
+/* ==================== FILTER SLIDERS ==================== */
+
+.filter-slider {
+  transition: background 0.2s;
+}
+
+.filter-slider::-webkit-slider-thumb {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.filter-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(0, 153, 255, 0.5);
+}
 }

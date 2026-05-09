@@ -108,7 +108,6 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 ## Project Structure
 
 ```
-modificador_resolucao/
 ├── main.js          # Electron main process
 ├── preload.js      # IPC bridge (contextBridge)
 ├── package.json    # Project configuration

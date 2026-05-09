@@ -11,8 +11,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^42.0.1",
-    "electron-builder": "^26.9.1"
+    "electron": "42.0.1",
+    "electron-builder": "26.9.1"
   },
   "build": {
     "appId": "com.imgro.app",

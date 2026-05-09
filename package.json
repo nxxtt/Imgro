@@ -12,7 +12,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "42.0.1",
-    "electron-builder": "26.9.1"
+    "electron-builder": "26.9.1",
+    "eslint": "^10.3.0"
   },
   "build": {
     "appId": "com.imgro.app",
@@ -25,11 +26,15 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "extraResources": [],
@@ -40,7 +45,9 @@
       "allowToChangeInstallationDirectory": true,
       "createStartMenuShortcut": true,
       "createDesktopShortcut": "always",
-      "installerLanguages": ["en-US"],
+      "installerLanguages": [
+        "en-US"
+      ],
       "language": "1033",
       "artifactName": "ImgroSetup.exe",
       "useZip": true

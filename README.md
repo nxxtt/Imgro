@@ -3,15 +3,25 @@
 Desktop application to resize images to any resolution (may distort).
 
 ![Version](https://img.shields.io/badge/version-1.2.0-blue)
-![Platform](https://img.shields.io/badge/platform-Windows%20x64-green)
+![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20Linux-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 
 ## Download
+
+### Windows
 
 | Type | File | Description |
 |------|------|-------------|
 | Portable | `Imgrop.exe` | Run directly, no installation |
 | Installer | `ImgroSetup.exe` | Full installation with shortcuts |
+
+### Linux
+
+| Type | File | Description |
+|------|------|-------------|
+| AppImage | `Imgro-1.2.0.AppImage` | Universal - works on all distros |
+| deb | `Imgro-1.2.0.deb` | Debian, Ubuntu, Mint |
+| rpm | `Imgro-1.2.0.rpm` | Fedora |
 
 ## How to Use
 
@@ -102,7 +112,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Requirements
 
-- Windows 10/11 (x64)
+- Windows 10/11 (x64) or Linux (x64)
 - No additional runtime required (self-contained)
 
 ## Project Structure

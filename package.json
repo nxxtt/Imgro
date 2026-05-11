@@ -79,6 +79,7 @@
     "rpm": {
       "artifactName": "Imgro-${version}.${ext}"
     },
+    "publish": null,
     "asar": true,
     "compression": "store",
     "files": [

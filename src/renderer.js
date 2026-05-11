@@ -30,156 +30,99 @@
  * @version 1.1.0
  */
 
-// ==================== GLOBAL STATE ====================
+// ==================== STATE MANAGEMENT ====================
 
 /**
- * Translation system - stores all language translations
- * @type {Object.<string, Object>}
+ * Centralized application state
+ * Replaces ~30 global variables
+ * @type {Object}
  */
-let translations = {};
+const appState = {
+  translations: {},
 
-/**
- * Current selected language code
- * @type {string}
- */
-let currentLang = 'en';
+  lang: 'en',
+
+  image: {
+    path: null,
+    dataUrl: null,
+    format: '',
+    dimensions: { width: 0, height: 0 }
+  },
+
+  cachedImage: null,
+
+  loadId: 0,
+
+  transform: {
+    rotation: 0,
+    flip: 'none'
+  },
+
+  filters: {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    grayscale: 0
+  },
+
+  output: {
+    format: 'original',
+    quality: 90
+  },
+
+  cachedExt: null,
+  cachedMime: null,
+
+  zoom: {
+    current: 100,
+    min: 25,
+    max: 400,
+    step: 25
+  },
+
+  MAX_CANVAS_SIZE: 65535,
+
+  ui: {
+    isLoading: false,
+    statusMessage: '',
+    statusType: ''
+  },
+
+  batch: {
+    files: [],
+    outputFolder: null
+  }
+};
+
 try {
-  currentLang = localStorage.getItem('lang') || 'en';
+  appState.lang = localStorage.getItem('lang') || 'en';
 } catch (e) {
   console.warn('localStorage not available:', e.message);
 }
 
-/**
- * Current loaded image file path
- * @type {string|null}
- */
-let currentFilePath = null;
-
-/**
- * Current image as base64 data URL
- * @type {string|null}
- */
-let currentDataUrl = null;
-
-/**
- * Original image format (e.g., 'PNG', 'JPEG')
- * @type {string}
- */
-let originalFormat = '';
-
-/**
- * Cached Image object for performance
- * @type {HTMLImageElement|null}
- */
-let cachedImage = null;
-
-/**
- * Load ID for race condition prevention
- * Used to discard outdated image loads
- * @type {number}
- */
-let currentLoadId = 0;
-
-/**
- * Current image rotation in degrees
- * @type {number}
- * @description 0, 90, 180, or 270
- */
-let currentRotation = 0;
-
-/**
- * Current flip state
- * @type {string}
- * @description 'none', 'horizontal', or 'vertical'
- */
-let currentFlip = 'none';
-
-/**
- * Brightness filter value (0-200)
- * @type {number}
- * @default 100
- */
-let filterBrightness = 100;
-
-/**
- * Contrast filter value (0-200)
- * @type {number}
- * @default 100
- */
-let filterContrast = 100;
-
-/**
- * Saturation filter value (0-200)
- * @type {number}
- * @default 100
- */
-let filterSaturation = 100;
-
-/**
- * Grayscale filter value (0-100)
- * @type {number}
- * @default 0
- */
-let filterGrayscale = 0;
-
-/**
- * Selected output format
- * @type {string}
- * @description 'original', 'PNG', 'JPEG', 'WEBP', 'BMP'
- */
-let outputFormat = 'original';
-
-/**
- * Cached file extension for performance
- * @type {string|null}
- */
-let cachedExt = null;
-
-/**
- * cached MIME type for performance
- * @type {string|null}
- */
-let cachedMime = null;
-
-/**
- * Current zoom level percentage
- * @type {number}
- * @default 100
- */
-let currentZoom = 100;
-
-/**
- * Minimum zoom level
- * @type {number}
- * @constant
- */
-const MIN_ZOOM = 25;
-
-/**
- * Maximum zoom level
- * @type {number}
- * @constant
- */
-const MAX_ZOOM = 400;
-
-/**
- * Zoom increment step
- * @type {number}
- * @constant
- */
-const ZOOM_STEP = 25;
-
-/**
- * Loading state indicator
- * @type {boolean}
- */
-let isLoading = false;
-
-/**
- * Reusable canvas for preview rendering
- * @type {HTMLCanvasElement}
- */
 const previewCanvas = document.createElement('canvas');
+
+function getState(path) {
+  return path.split('.').reduce((obj, key) => obj && obj[key], appState);
+}
+
+function setState(path, value) {
+  const keys = path.split('.');
+  const lastKey = keys.pop();
+  const target = keys.reduce((obj, key) => {
+    if (!obj[key]) obj[key] = {};
+    return obj[key];
+  }, appState);
+  target[lastKey] = value;
+}
+
+function validateDimensions(width, height) {
+  if (!Number.isInteger(width) || !Number.isInteger(height)) return false;
+  if (width < 1 || height < 1) return false;
+  if (!isFinite(width) || !isFinite(height)) return false;
+  if (width > appState.MAX_CANVAS_SIZE || height > appState.MAX_CANVAS_SIZE) return false;
+  return true;
+}
 
 // ==================== HELPER FUNCTIONS ====================
 
@@ -261,9 +204,6 @@ const saturationLabel = document.getElementById('saturation-label');
 const grayscaleLabel = document.getElementById('grayscale-label');
 const outputFormatSelect = document.getElementById('output-format');
 
-let batchFiles = [];
-let batchOutputFolder = null;
-
 const btnAddFiles = document.getElementById('btn-add-files');
 const btnSelectFolder = document.getElementById('btn-select-folder');
 const btnClearBatch = document.getElementById('btn-clear-batch');
@@ -313,7 +253,7 @@ function getMimeType(ext) {
  */
 
 function applyTransform() {
-  if (!cachedImage || !currentFilePath) return;
+  if (!appState.cachedImage || !appState.image.path) return;
   updatePreview();
 }
 
@@ -323,8 +263,8 @@ function applyTransform() {
  * @returns {void}
  */
 function rotateLeft() {
-  if (!cachedImage) return;
-  currentRotation = (currentRotation - 90 + 360) % 360;
+  if (!appState.cachedImage) return;
+  appState.transform.rotation = (appState.transform.rotation - 90 + 360) % 360;
   applyTransform();
 }
 
@@ -334,8 +274,8 @@ function rotateLeft() {
  * @returns {void}
  */
 function rotateRight() {
-  if (!cachedImage) return;
-  currentRotation = (currentRotation + 90) % 360;
+  if (!appState.cachedImage) return;
+  appState.transform.rotation = (appState.transform.rotation + 90) % 360;
   applyTransform();
 }
 
@@ -345,8 +285,8 @@ function rotateRight() {
  * @returns {void}
  */
 function flipHorizontal() {
-  if (!cachedImage) return;
-  currentFlip = currentFlip === 'horizontal' ? 'none' : 'horizontal';
+  if (!appState.cachedImage) return;
+  appState.transform.flip = appState.transform.flip === 'horizontal' ? 'none' : 'horizontal';
   applyTransform();
 }
 
@@ -356,8 +296,8 @@ function flipHorizontal() {
  * @returns {void}
  */
 function flipVertical() {
-  if (!cachedImage) return;
-  currentFlip = currentFlip === 'vertical' ? 'none' : 'vertical';
+  if (!appState.cachedImage) return;
+  appState.transform.flip = appState.transform.flip === 'vertical' ? 'none' : 'vertical';
   applyTransform();
 }
 
@@ -367,8 +307,8 @@ function flipVertical() {
  * @returns {void}
  */
 function resetTransform() {
-  currentRotation = 0;
-  currentFlip = 'none';
+  appState.transform.rotation = 0;
+  appState.transform.flip = 'none';
   applyTransform();
 }
 
@@ -381,7 +321,7 @@ function setupTransformHandlers() {
 }
 
 function applyFiltersToContext(ctx) {
-  const filterString = `brightness(${filterBrightness}%) contrast(${filterContrast}%) saturate(${filterSaturation}%) grayscale(${filterGrayscale}%)`;
+  const filterString = `brightness(${appState.filters.brightness}%) contrast(${appState.filters.contrast}%) saturate(${appState.filters.saturation}%) grayscale(${appState.filters.grayscale}%)`;
   ctx.filter = filterString;
 }
 
@@ -393,29 +333,29 @@ function applyFiltersToContext(ctx) {
  */
 function setupFilterHandlers() {
   filterBrightnessSlider.addEventListener('input', () => {
-    filterBrightness = parseInt(filterBrightnessSlider.value);
-    brightnessValue.textContent = filterBrightness + '%';
+    appState.filters.brightness = parseInt(filterBrightnessSlider.value);
+    brightnessValue.textContent = appState.filters.brightness + '%';
     clearTimeout(previewDebounce);
     previewDebounce = setTimeout(updatePreview, 200);
   });
 
   filterContrastSlider.addEventListener('input', () => {
-    filterContrast = parseInt(filterContrastSlider.value);
-    contrastValue.textContent = filterContrast + '%';
+    appState.filters.contrast = parseInt(filterContrastSlider.value);
+    contrastValue.textContent = appState.filters.contrast + '%';
     clearTimeout(previewDebounce);
     previewDebounce = setTimeout(updatePreview, 200);
   });
 
   filterSaturationSlider.addEventListener('input', () => {
-    filterSaturation = parseInt(filterSaturationSlider.value);
-    saturationValue.textContent = filterSaturation + '%';
+    appState.filters.saturation = parseInt(filterSaturationSlider.value);
+    saturationValue.textContent = appState.filters.saturation + '%';
     clearTimeout(previewDebounce);
     previewDebounce = setTimeout(updatePreview, 200);
   });
 
   filterGrayscaleSlider.addEventListener('input', () => {
-    filterGrayscale = parseInt(filterGrayscaleSlider.value);
-    grayscaleValue.textContent = filterGrayscale + '%';
+    appState.filters.grayscale = parseInt(filterGrayscaleSlider.value);
+    grayscaleValue.textContent = appState.filters.grayscale + '%';
     clearTimeout(previewDebounce);
     previewDebounce = setTimeout(updatePreview, 200);
   });
@@ -423,15 +363,15 @@ function setupFilterHandlers() {
   btnResetFilters.addEventListener('click', resetFilters);
   
   outputFormatSelect.addEventListener('change', () => {
-    outputFormat = outputFormatSelect.value;
+    appState.output.format = outputFormatSelect.value;
   });
 }
 
 function resetFilters() {
-  filterBrightness = 100;
-  filterContrast = 100;
-  filterSaturation = 100;
-  filterGrayscale = 0;
+  appState.filters.brightness = 100;
+  appState.filters.contrast = 100;
+  appState.filters.saturation = 100;
+  appState.filters.grayscale = 0;
   filterBrightnessSlider.value = 100;
   filterContrastSlider.value = 100;
   filterSaturationSlider.value = 100;
@@ -462,17 +402,16 @@ function setupRatioButtons() {
       btn.classList.add('active');
 
       if (ratio === 'original') {
-        if (currentDataUrl) {
+        if (appState.image.dataUrl) {
           const img = new Image();
           img.onload = function() {
             inputWidth.value = this.width;
             inputHeight.value = this.height;
             updatePreview();
-            // Memory cleanup
             this.onload = null;
             this.src = '';
           };
-          img.src = currentDataUrl;
+          img.src = appState.image.dataUrl;
         }
       } else if (currentHeight && ratios[ratio]) {
         inputWidth.value = Math.round(currentHeight * ratios[ratio]);
@@ -496,8 +435,8 @@ function setupBatchHandlers() {
         const ext = getFileExtension(filepath);
         if (validExtensions.includes(ext)) {
           const filename = filepath.split(/[/\\]/).pop();
-          if (!batchFiles.find(f => f.path === filepath)) {
-            batchFiles.push({ path: filepath, name: filename });
+          if (!appState.batch.files.find(f => f.path === filepath)) {
+            appState.batch.files.push({ path: filepath, name: filename });
           }
         }
       });
@@ -508,21 +447,21 @@ function setupBatchHandlers() {
   btnSelectFolder.addEventListener('click', async () => {
     const folder = await window.electronAPI.selectFolder();
     if (folder) {
-      batchOutputFolder = folder;
+      appState.batch.outputFolder = folder;
       batchFolder.textContent = folder;
       updateBatchButtonState();
     }
   });
 
   btnClearBatch.addEventListener('click', () => {
-    batchFiles = [];
-    batchOutputFolder = null;
+    appState.batch.files = [];
+    appState.batch.outputFolder = null;
     batchFolder.textContent = t('noFolderSelected');
     updateBatchUI();
   });
 
   btnProcessBatch.addEventListener('click', async () => {
-    if (!batchOutputFolder || batchFiles.length === 0) return;
+    if (!appState.batch.outputFolder || appState.batch.files.length === 0) return;
 
     const width = parseInt(batchWidth.value) || 800;
     const height = parseInt(batchHeight.value) || 600;
@@ -532,14 +471,14 @@ function setupBatchHandlers() {
     batchProgress.style.display = 'block';
     
     let successCount = 0;
-    const total = batchFiles.length;
+    const total = appState.batch.files.length;
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
 
     for (let i = 0; i < total; i++) {
-      const file = batchFiles[i];
+      const file = appState.batch.files[i];
       const progress = i + 1;
       progressText.textContent = `${progress}/${total}`;
       progressFill.style.width = `${(progress / total) * 100}%`;
@@ -606,7 +545,7 @@ function setupBatchHandlers() {
         outputExt = '.bmp';
       }
 
-      const imgQuality = (outputExt === '.png') ? 1.0 : quality / 100;
+      const imgQuality = (['.png'].includes(outputExt)) ? 1.0 : quality / 100;
 
       const base64 = canvas.toDataURL(outputMimeType, imgQuality);
       // Fix: Use performance.now() + index to prevent filename collision
@@ -614,7 +553,7 @@ function setupBatchHandlers() {
       const filename = `imagem_${timestamp}_${i + 1}${outputExt}`;
 
       const result = await window.electronAPI.saveBatchImage({
-        outputFolder: batchOutputFolder,
+        outputFolder: appState.batch.outputFolder,
         filename: filename,
         base64Data: base64
       });
@@ -645,11 +584,10 @@ function setupBatchHandlers() {
 }
 
 function updateBatchUI() {
-  batchFilesInfo.textContent = t('filesCount').replace('{0}', batchFiles.length);
+  batchFilesInfo.textContent = t('filesCount').replace('{0}', appState.batch.files.length);
 
-  // Use DocumentFragment for better performance (optimization)
   const fragment = document.createDocumentFragment();
-  batchFiles.forEach((file, index) => {
+  appState.batch.files.forEach((file, index) => {
     const div = document.createElement('div');
     div.className = 'batch-file-item';
     div.dataset.index = index;
@@ -673,15 +611,15 @@ function updateBatchUI() {
 batchFilesList.addEventListener('click', (e) => {
   if (e.target.classList.contains('batch-remove-btn')) {
     const index = parseInt(e.target.dataset.index);
-    if (!isNaN(index) && index >= 0 && index < batchFiles.length) {
-      batchFiles.splice(index, 1);
+    if (!isNaN(index) && index >= 0 && index < appState.batch.files.length) {
+      appState.batch.files.splice(index, 1);
       updateBatchUI();
     }
   }
 });
 
 function updateBatchButtonState() {
-  btnProcessBatch.disabled = !batchOutputFolder || batchFiles.length === 0;
+  btnProcessBatch.disabled = !appState.batch.outputFolder || appState.batch.files.length === 0;
 }
 
 function setupDragAndDrop() {
@@ -747,7 +685,7 @@ async function loadTranslations() {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    translations = await response.json();
+    appState.translations = await response.json();
     applyTranslations();
   } catch (error) {
     console.error('Failed to load translations:', error);
@@ -755,12 +693,11 @@ async function loadTranslations() {
 }
 
 function t(key) {
-  const langObj = translations[currentLang];
+  const langObj = appState.translations[appState.lang];
   if (langObj && langObj[key]) return langObj[key];
-  const ptObj = translations['pt-BR'];
+  const ptObj = appState.translations['pt-BR'];
   if (ptObj && ptObj[key]) return ptObj[key];
-  // Fallback to English
-  const enObj = translations['en'];
+  const enObj = appState.translations['en'];
   if (enObj && enObj[key]) return enObj[key];
   return key;
 }
@@ -798,12 +735,11 @@ function applyTranslations() {
     qualitySlider.title = t('qualityHint');
   }
   
-  // Preserve file info when changing language (don't reset to "noFileSelected")
   const labelEl = fileInfo.querySelector('.label');
   const filenameEl = fileInfo.querySelector('.filename');
   
-  if (currentFilePath) {
-    const filename = currentFilePath.split(/[/\\]/).pop();
+  if (appState.image.path) {
+    const filename = appState.image.path.split(/[/\\]/).pop();
     fileInfo.innerHTML = `<span class="filename">${filename}</span>`;
   } else if (labelEl) {
     labelEl.textContent = t('noFileSelected');
@@ -816,8 +752,8 @@ function applyTranslations() {
   if (btnSelectFolder) btnSelectFolder.textContent = t('selectFolder');
   if (btnClearBatch) btnClearBatch.textContent = t('clearBatch');
   if (btnProcessBatch) btnProcessBatch.innerHTML = t('processAll');
-  if (batchFolder && !batchOutputFolder) batchFolder.textContent = t('noFolderSelected');
-  if (batchFilesInfo) batchFilesInfo.textContent = t('filesCount').replace('{0}', batchFiles.length);
+  if (batchFolder && !appState.batch.outputFolder) batchFolder.textContent = t('noFolderSelected');
+  if (batchFilesInfo) batchFilesInfo.textContent = t('filesCount').replace('{0}', appState.batch.files.length);
   if (batchQuality) batchQuality.title = t('qualityHint');
   if (batchWidthLabel) batchWidthLabel.textContent = t('newWidth') + ':';
   if (batchHeightLabel) batchHeightLabel.textContent = t('newHeight') + ':';
@@ -837,9 +773,9 @@ function applyTranslations() {
 }
 
 langSelect.addEventListener('change', (e) => {
-  currentLang = e.target.value;
+  appState.lang = e.target.value;
   try {
-    localStorage.setItem('lang', currentLang);
+    localStorage.setItem('lang', appState.lang);
   } catch (err) {
     console.warn('Cannot save language preference:', err.message);
   }
@@ -854,22 +790,21 @@ btnSelect.addEventListener('click', async () => {
 });
 
 btnResize.addEventListener('click', async () => {
-  if (!currentFilePath || !currentDataUrl || !cachedImage) return;
+  if (!appState.image.path || !appState.image.dataUrl || !appState.cachedImage) return;
 
   let width = parseInt(inputWidth.value);
   let height = parseInt(inputHeight.value);
 
-  if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || isNaN(width) || isNaN(height) || !isFinite(width) || !isFinite(height) || width > 20000 || height > 20000) {
+  if (!validateDimensions(width, height)) {
     showStatus(t('errorResize'), 'error');
     return;
   }
 
-  const isRotated90or270 = (currentRotation === 90 || currentRotation === 270);
+  const isRotated90or270 = (appState.transform.rotation === 90 || appState.transform.rotation === 270);
   let finalWidth = isRotated90or270 ? height : width;
   let finalHeight = isRotated90or270 ? width : height;
 
-  // Critical fix: validate canvas dimensions (max 65535)
-  if (finalWidth > 65535 || finalHeight > 65535) {
+  if (!validateDimensions(finalWidth, finalHeight)) {
     showStatus(t('errorResize') + ': Dimensions too large for canvas', 'error');
     return;
   }
@@ -888,34 +823,32 @@ btnResize.addEventListener('click', async () => {
   const centerY = finalHeight / 2;
 
   ctx.translate(centerX, centerY);
-  ctx.rotate((currentRotation * Math.PI) / 180);
+  ctx.rotate((appState.transform.rotation * Math.PI) / 180);
 
-  if (currentFlip === 'horizontal') {
+  if (appState.transform.flip === 'horizontal') {
     ctx.scale(-1, 1);
-  } else if (currentFlip === 'vertical') {
+  } else if (appState.transform.flip === 'vertical') {
     ctx.scale(1, -1);
   }
 
   applyFiltersToContext(ctx);
-  // Use scaled dimensions for proper centering
-  ctx.drawImage(cachedImage, -finalWidth / 2, -finalHeight / 2, finalWidth, finalHeight);
+  ctx.drawImage(appState.cachedImage, -finalWidth / 2, -finalHeight / 2, finalWidth, finalHeight);
   ctx.filter = 'none';
   ctx.restore();
   
-  // Determine output format and MIME type
   let outputMimeType = 'image/png';
-  let outputExt = getFileExtension(currentFilePath);
+  let outputExt = getFileExtension(appState.image.path);
   
-  if (outputFormat === 'PNG') {
+  if (appState.output.format === 'PNG') {
     outputMimeType = 'image/png';
     outputExt = 'png';
-  } else if (outputFormat === 'JPEG') {
+  } else if (appState.output.format === 'JPEG') {
     outputMimeType = 'image/jpeg';
     outputExt = 'jpg';
-  } else if (outputFormat === 'WEBP') {
+  } else if (appState.output.format === 'WEBP') {
     outputMimeType = 'image/webp';
     outputExt = 'webp';
-  } else if (outputFormat === 'BMP') {
+  } else if (appState.output.format === 'BMP') {
     outputMimeType = 'image/bmp';
     outputExt = 'bmp';
   }
@@ -928,7 +861,7 @@ btnResize.addEventListener('click', async () => {
     base64Data: resizedBase64,
     width: finalWidth,
     height: finalHeight,
-    format: outputFormat
+    format: appState.output.format
   });
 
   if (result.success) {
@@ -951,14 +884,14 @@ btnResize.addEventListener('click', async () => {
 });
 
 btnClear.addEventListener('click', () => {
-  currentFilePath = null;
-  currentDataUrl = null;
-  originalFormat = '';
-  cachedImage = null;
-  currentLoadId++;
+  appState.image.path = null;
+  appState.image.dataUrl = null;
+  appState.image.format = '';
+  appState.cachedImage = null;
+  appState.loadId++;
   resetTransform();
   resetFilters();
-  outputFormat = 'original';
+  appState.output.format = 'original';
   outputFormatSelect.value = 'original';
 
   inputWidth.value = '';
@@ -986,42 +919,43 @@ btnClear.addEventListener('click', () => {
  * @param {string} filepath - Path to the image file
  */
 async function loadImage(filepath) {
-  currentFilePath = filepath;
-  const thisLoadId = ++currentLoadId;
+  appState.image.path = filepath;
+  const thisLoadId = ++appState.loadId;
   resetTransform();
   resetFilters();
-  outputFormat = 'original';
+  appState.output.format = 'original';
   outputFormatSelect.value = 'original';
 
-  // Cache extension and MIME for performance
-  cachedExt = getFileExtension(filepath);
-  cachedMime = getMimeType(cachedExt);
+  appState.cachedExt = getFileExtension(filepath);
+  appState.cachedMime = getMimeType(appState.cachedExt);
 
   const info = await window.electronAPI.getImageInfo(filepath);
   if (!info || !info.dataUrl) {
-    if (thisLoadId !== currentLoadId) return;
+    if (thisLoadId !== appState.loadId) return;
     showStatus(t('errorLoadingImage'), 'error');
     return;
   }
 
-  if (thisLoadId !== currentLoadId) return;
+  if (thisLoadId !== appState.loadId) return;
 
-  currentDataUrl = info.dataUrl;
-  originalFormat = info.format;
-  cachedImage = null;
+  appState.image.dataUrl = info.dataUrl;
+  appState.image.format = info.format;
+  appState.cachedImage = null;
 
   const img = new Image();
   img.onload = function() {
-    if (thisLoadId !== currentLoadId) return;
+    if (thisLoadId !== appState.loadId) return;
     
-    cachedImage = this;
+    appState.cachedImage = this;
     const originalWidth = this.width;
     const originalHeight = this.height;
 
+    appState.image.dimensions.width = originalWidth;
+    appState.image.dimensions.height = originalHeight;
     originalDims.textContent = `${originalWidth} x ${originalHeight} ${t('px')}`;
-    formatInfo.textContent = originalFormat;
+    formatInfo.textContent = appState.image.format;
 
-    qualityRow.style.display = isJpegFormat(originalFormat) ? 'flex' : 'none';
+    qualityRow.style.display = isJpegFormat(appState.image.format) ? 'flex' : 'none';
 
     const filename = filepath.split(/[/\\]/).pop();
     fileInfo.innerHTML = `<span class="filename">${filename}</span>`;
@@ -1029,7 +963,7 @@ async function loadImage(filepath) {
     inputWidth.value = originalWidth;
     inputHeight.value = originalHeight;
 
-    previewImage.src = currentDataUrl;
+    previewImage.src = appState.image.dataUrl;
     previewImage.classList.remove('hidden');
     emptyState.style.display = 'none';
 
@@ -1037,10 +971,10 @@ async function loadImage(filepath) {
     showStatus(t('imageLoaded'), 'success');
   };
   img.onerror = function() {
-    if (thisLoadId !== currentLoadId) return;
+    if (thisLoadId !== appState.loadId) return;
     showStatus(t('errorLoadingImage'), 'error');
   };
-  img.src = currentDataUrl;
+  img.src = appState.image.dataUrl;
 }
 
 /**
@@ -1077,13 +1011,13 @@ let previewDebounce = null;
  * @returns {void}
  */
 function updatePreview() {
-  if (!currentDataUrl || !currentFilePath || !cachedImage) return;
+  if (!appState.image.dataUrl || !appState.image.path || !appState.cachedImage) return;
 
   let width = parseInt(inputWidth.value);
   let height = parseInt(inputHeight.value);
-  if (!width || !height || width < 1 || height < 1) return;
+  if (!validateDimensions(width, height)) return;
 
-  const isRotated90or270 = (currentRotation === 90 || currentRotation === 270);
+  const isRotated90or270 = (appState.transform.rotation === 90 || appState.transform.rotation === 270);
   
   if (isRotated90or270) {
     const temp = width;
@@ -1102,22 +1036,21 @@ function updatePreview() {
   const centerY = height / 2;
 
   ctx.translate(centerX, centerY);
-  ctx.rotate((currentRotation * Math.PI) / 180);
+  ctx.rotate((appState.transform.rotation * Math.PI) / 180);
 
-  if (currentFlip === 'horizontal') {
+  if (appState.transform.flip === 'horizontal') {
     ctx.scale(-1, 1);
-  } else if (currentFlip === 'vertical') {
+  } else if (appState.transform.flip === 'vertical') {
     ctx.scale(1, -1);
   }
 
   applyFiltersToContext(ctx);
-  // Fix: Use user-specified dimensions instead of original image dimensions
-  ctx.drawImage(cachedImage, -width / 2, -height / 2, width, height);
+  ctx.drawImage(appState.cachedImage, -width / 2, -height / 2, width, height);
   ctx.filter = 'none';
 
   ctx.restore();
 
-  const ext = getFileExtension(currentFilePath);
+  const ext = getFileExtension(appState.image.path);
   const mimeType = getMimeType(ext);
   const quality = ext === 'png' ? 1.0 : (qualitySlider ? qualitySlider.value / 100 : 0.9);
   previewImage.src = previewCanvas.toDataURL(mimeType, quality);
@@ -1152,9 +1085,9 @@ function setupCollapsiblePanels() {
 
 function updateZoom() {
   if (!previewImage || previewImage.classList.contains('hidden')) return;
-  zoomLevelDisplay.textContent = currentZoom + '%';
-  previewImage.style.transform = `scale(${currentZoom / 100})`;
-  if (currentZoom !== 100) {
+  zoomLevelDisplay.textContent = appState.zoom.current + '%';
+  previewImage.style.transform = `scale(${appState.zoom.current / 100})`;
+  if (appState.zoom.current !== 100) {
     previewImage.classList.add('zoomed');
   } else {
     previewImage.classList.remove('zoomed');
@@ -1162,33 +1095,33 @@ function updateZoom() {
 }
 
 function zoomIn() {
-  if (currentZoom < MAX_ZOOM) {
-    currentZoom = Math.min(currentZoom + ZOOM_STEP, MAX_ZOOM);
+  if (appState.zoom.current < appState.zoom.max) {
+    appState.zoom.current = Math.min(appState.zoom.current + appState.zoom.step, appState.zoom.max);
     updateZoom();
   }
 }
 
 function zoomOut() {
-  if (currentZoom > MIN_ZOOM) {
-    currentZoom = Math.max(currentZoom - ZOOM_STEP, MIN_ZOOM);
+  if (appState.zoom.current > appState.zoom.min) {
+    appState.zoom.current = Math.max(appState.zoom.current - appState.zoom.step, appState.zoom.min);
     updateZoom();
   }
 }
 
 function zoomFit() {
-  currentZoom = 100;
+  appState.zoom.current = 100;
   updateZoom();
 }
 
 // ==================== LOADING SPINNER ====================
 
 function showLoading() {
-  isLoading = true;
+  appState.ui.isLoading = true;
   loadingSpinner.classList.add('active');
 }
 
 function hideLoading() {
-  isLoading = false;
+  appState.ui.isLoading = false;
   loadingSpinner.classList.remove('active');
 }
 
@@ -1211,7 +1144,7 @@ workspace.addEventListener('wheel', (e) => {
 }, { passive: false });
 
 loadTranslations().then(() => {
-  langSelect.value = currentLang;
+  langSelect.value = appState.lang;
   setupDragAndDrop();
   setupKeyboardShortcuts();
   setupRatioButtons();

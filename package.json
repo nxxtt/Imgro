@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win --x64",
+    "build": "electron-builder --win --linux",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --win --linux",
     "pack": "electron-builder --dir"
   },
   "author": "",
@@ -18,7 +21,7 @@
   "build": {
     "appId": "com.imgro.app",
     "productName": "Imgro",
-    "icon": "C:\\Users\\Osvaldo\\Downloads\\ChatGPT Image 1 de mai. de 2026, 11_40_27.png",
+    "icon": "assets/icon.png",
     "directories": {
       "output": "dist-v4"
     },
@@ -40,6 +43,14 @@
       "extraResources": [],
       "extraFiles": []
     },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "category": "Graphics"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
@@ -55,6 +66,15 @@
     "portable": {
       "artifactName": "Imgrop.exe",
       "useZip": true
+    },
+    "appImage": {
+      "artifactName": "Imgro-${version}.${ext}"
+    },
+    "deb": {
+      "artifactName": "Imgro-${version}.${ext}"
+    },
+    "rpm": {
+      "artifactName": "Imgro-${version}.${ext}"
     },
     "asar": true,
     "compression": "store",

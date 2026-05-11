@@ -11,7 +11,10 @@
     "build:all": "electron-builder --win --linux",
     "pack": "electron-builder --dir"
   },
-  "author": "",
+  "author": {
+    "name": "nxxtt",
+    "email": "osvaldo.kuhn.dantas@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "electron": "42.0.1",

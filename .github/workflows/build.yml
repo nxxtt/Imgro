@@ -24,10 +24,20 @@ jobs:
       - name: Build for Linux
         run: npm run build:linux
 
-      - name: Upload artifacts
+      - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: linux-builds
+          name: Imgro-AppImage
           path: dist-v4/*.AppImage
+
+      - name: Upload deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: Imgro-deb
           path: dist-v4/*.deb
+
+      - name: Upload rpm
+        uses: actions/upload-artifact@v4
+        with:
+          name: Imgro-rpm
           path: dist-v4/*.rpm
